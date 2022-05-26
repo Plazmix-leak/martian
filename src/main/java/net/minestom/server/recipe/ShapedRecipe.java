@@ -1,0 +1,70 @@
+package net.minestom.server.recipe;
+
+import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+public abstract class ShapedRecipe extends Recipe {
+    private final int width;
+    private final int height;
+    private String group;
+    private final List<Ingredient> ingredients;
+    private ItemStack result;
+
+    protected ShapedRecipe(@NotNull String recipeId,
+                        int width,
+                        int height,
+                        @NotNull String group,
+                        @Nullable List<Ingredient> ingredients,
+                        @NotNull ItemStack result) {
+        super(RecipeType.SHAPED, recipeId);
+        this.width = width;
+        this.height = height;
+        this.group = group;
+        this.ingredients = Objects.requireNonNullElseGet(ingredients, LinkedList::new);
+        this.result = result;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    @NotNull
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(@NotNull String group) {
+        this.group = group;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        if (ingredients.size() + 1 > width * height) {
+            throw new IndexOutOfBoundsException("You cannot add more ingredients than width*height");
+        }
+
+        ingredients.add(ingredient);
+    }
+
+    @NotNull
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    @NotNull
+    public ItemStack getResult() {
+        return result;
+    }
+
+    public void setResult(@NotNull ItemStack result) {
+        this.result = result;
+    }
+}
